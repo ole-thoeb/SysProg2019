@@ -57,3 +57,4 @@ dkms.conf
 #rust
 *target
 *.lock
+Blatt_4/Nr12/debug.txt
