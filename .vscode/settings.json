@@ -8,6 +8,10 @@
 		"chessboard.h": "c",
 		"string.h": "c",
 		"mystdlib.h": "c",
-		"mystddef.h": "c"
+		"mystddef.h": "c",
+		"shell.h": "c",
+		"unistd.h": "c",
+		"time.h": "c",
+		"myunistd.h": "c"
 	}
 }

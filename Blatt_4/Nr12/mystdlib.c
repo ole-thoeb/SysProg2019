@@ -67,7 +67,7 @@ void *mymalloc(size_t size) {
 		//set size of new block
 		newHeader->size = size;
 		//decrease size of previous block
-		curHeader->size -= size + sizeof(header);
+		curHeader->size -= totalBlockSize(size);
 		// if current block is empty
 		if (!curHeader->size) {
 			// get last header
@@ -93,7 +93,7 @@ void *mymalloc(size_t size) {
 			//set size of new block
 			newHeader->size = size;
 			//decrease size of previous block
-			curHeader->size -= size + sizeof(header);
+			curHeader->size -= totalBlockSize(size);
 			//link out current block if remaining size is 0
 			if (!curHeader->size) {
 				prevHeader->next = curHeader->next;
