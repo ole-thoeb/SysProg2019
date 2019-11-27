@@ -1,12 +1,14 @@
 #include "mygetline.h"
 #include "myunistd.h"
 #include "mystdlib.h"
+#include <stdio.h>
 
 size_t increaseBuffer(void **buf, size_t *buflen, size_t size) {
 	size_t len = *buflen;
 	if (*buflen == 0) len = size;
 	len *= 2;
 
+	//printf("buf %p\n", buf);
 	*buf = myrealloc(*buf, len);
 	if (*buf == NULL) {
 		//puts("could reallocate buf");
@@ -21,7 +23,7 @@ ssize_t mygetline(char **buf, size_t *buflen, int fd) {
 	ssize_t curlen = 0;
 	while (1) {
 		// if buffer is too short: double length and abort if malloc fails
-		if (curlen + 1 >= *buflen && increaseBuffer(buf, buflen, sizeof(char)) == -1) {
+		if (curlen + 1 >= *buflen && increaseBuffer((void**)buf, buflen, sizeof(char)) == -1) {
 			return -1;
 		}
 		ssize_t res = myread(fd, *buf + curlen, 1);

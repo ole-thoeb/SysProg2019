@@ -2,6 +2,7 @@
 #include "mystddef.h"
 #include "mystdlib.h"
 #include "mygetline.h"
+#include <stdio.h>
 
 char *emptychars = "\t\n\v\f\r ";
 int emptycharlen = 6;
@@ -19,20 +20,25 @@ char **shell_split(char *input) {
 		char *stringBuf = NULL;
 
 		// if buffer is too short: double length and abort if malloc fails
-		if (b + 1 >= bufLen && increaseBuffer(&buf, &bufLen, sizeof(char*)) == -1) {
+		if (b + 1 >= bufLen && increaseBuffer((void**)&buf, &bufLen, sizeof(char*)) == -1) {
 			return NULL;
 		}
 
 		while (1) {
 			// if buffer is too short: double length and abort if malloc fails
-			if (s >= stringBufLen && increaseBuffer(&stringBuf, &stringBufLen, sizeof(char)) == -1) {
+			if (s >= stringBufLen && increaseBuffer((void**)&stringBuf, &stringBufLen, sizeof(char)) == -1) {
 				return NULL;
 			}
 			if (input[i] == '\0') {
-				//null terminate string
-				stringBuf[s] = '\0';
-				buf[b] = stringBuf;
-				b++;
+				if (s != 0) {
+					//null terminate string
+					stringBuf[s] = '\0';
+					buf[b] = stringBuf;
+					b++;
+				} else {
+					myfree(stringBuf);
+				}
+				
 				//null terminate list
 				buf[b] = NULL;
 				return buf;
@@ -44,6 +50,8 @@ char **shell_split(char *input) {
 						stringBuf[s] = '\0';
 						buf[b] = stringBuf;
 						b++;
+					} else {
+						myfree(stringBuf);
 					}
 					i++;
 					goto Top_Level_Loop;
