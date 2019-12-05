@@ -11,12 +11,6 @@ int main(int argc, char const *argv[]) {
 
 	int times = atoi(argv[1]);
 	const char *programm = argv[2];
-	int arguments = argc - 3;
-	char *args[arguments + 1];
-	for (int i = 0; i < arguments; i++) {
-		args[i] = argv[i + 3];
-	}
-	args[arguments] = NULL;
 	
 	for (int i = 0; i < times; i++) {		
 		pid_t pid = fork();
@@ -24,13 +18,13 @@ int main(int argc, char const *argv[]) {
 			fprintf(stderr, "fork failed");
 			exit(-1);
 		} else if (pid == 0) { //child
-			execvp(programm, args);
+			execvp(programm, argv + 2);
 		} else { //parent
 			//nothing
 		}
 	}
 	while (wait(NULL) > 0) {
-		puts("n");
+		//puts("n");
 	}
 
 	return 0;

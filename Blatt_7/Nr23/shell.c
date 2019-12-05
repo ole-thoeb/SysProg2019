@@ -31,10 +31,15 @@ char **shell_split(char *input) {
 				return NULL;
 			}
 			if (input[i] == '\0') {
-				//null terminate string
-				stringBuf[s] = '\0';
-				buf[b] = stringBuf;
-				b++;
+				if (s != 0) {
+					//null terminate string
+					stringBuf[s] = '\0';
+					buf[b] = stringBuf;
+					b++;
+				} else {
+					myfree(stringBuf);
+				}
+				
 				//null terminate list
 				buf[b] = NULL;
 				return buf;
@@ -59,14 +64,12 @@ char **shell_split(char *input) {
 		}
 		i++;
 	}
-	
 }
 
 extern char **environ;
 
 pid_t run_command(char **argv, int no_fork) {
 	char *cmd = argv[0];
-	char **args = argv + 1;
 
 	if (!no_fork) {
 		pid_t pid = myfork();
@@ -74,7 +77,7 @@ pid_t run_command(char **argv, int no_fork) {
 			mywrite(2, "forkfailed\n", 11);
 			return pid;
 		} else if (pid == 0) { //child
-			int result = myexecve(cmd, args, environ); //should not return
+			int result = myexecve(cmd, argv, environ); //should not return
 			mywrite(2, "execfailed\n", 11);
 			return result;
 		} else { //parent
