@@ -12,6 +12,8 @@
 		"shell.h": "c",
 		"unistd.h": "c",
 		"time.h": "c",
-		"myunistd.h": "c"
+		"myunistd.h": "c",
+		"math.h": "c",
+		"rwlock.h": "c"
 	}
 }
